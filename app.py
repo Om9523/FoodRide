@@ -1,7 +1,7 @@
 # FoodRide Project - Flask + MongoDB
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from bson.objectid import ObjectId
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
