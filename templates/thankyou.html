@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #f8f9fa, #e0f7fa);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 50px;
+      color: #333;
+    }
+
+    .thank-you-container {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #2e7d32;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .home-button {
+      display: inline-block;
+      text-decoration: none;
+      background-color: #00796b;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .home-button:hover {
+      background-color: #004d40;
+    }
+  </style>
+</head>
+<body onload="launchConfetti()">
+  <div class="thank-you-container">
+    <h1>🎉 Thank You for Your Kindness! 🎉</h1>
+    <p>Your food donation is on its way to help someone in need. You're making a real difference! 💚</p>
+    <a href="/" class="home-button">← Back to Home</a>
+  </div>
+
+  <script>
+    function launchConfetti() {
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    }
+  </script>
+</body>
+</html>
