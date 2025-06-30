@@ -1,5 +1,3 @@
-# FoodRide Project - Flask + MongoDB
-
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from pymongo import MongoClient
 from flask_pymongo import PyMongo 
@@ -7,8 +5,9 @@ from bson.objectid import ObjectId
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
+import logging, os
 
-
+# ------------------- Flask Setup -------------------
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
@@ -19,6 +18,29 @@ mongo = PyMongo(app)
 donations_col = mongo.db.donations
 ngos_col = mongo.db.ngos
 rider_col = mongo.db.rider
+
+# ------------------- IP Logging Setup -------------------
+LOG_FILE = "access.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
+
+def get_client_ip(req):
+    """Get real visitor IP even behind proxy/CDN like Cloudflare"""
+    ip = req.headers.get('CF-Connecting-IP') or \
+         req.headers.get('X-Forwarded-For', '').split(',')[0].strip() or \
+         req.remote_addr or 'Unknown'
+    return ip
+
+@app.before_request
+def log_ip():
+    ip = get_client_ip(request)
+    logging.info(f"Visitor IP: {ip} | Path: {request.path}")
 
 # ---------------------- Routes ----------------------
 
@@ -45,36 +67,34 @@ def donate():
 
 @app.route('/ngo/register', methods=['GET', 'POST'])
 def ngo_register():
- if request.method == 'POST':
-    name = request.form['name']
-    email = request.form['email']
-    password = generate_password_hash(request.form['password'])
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = generate_password_hash(request.form['password'])
 
-    lat_str = request.form.get('lat', '').strip()
-    lng_str = request.form.get('lng', '').strip()
+        lat_str = request.form.get('lat', '').strip()
+        lng_str = request.form.get('lng', '').strip()
 
-    if not lat_str or not lng_str:
-        return "Latitude and Longitude are required", 400  # or flash message + redirect
+        if not lat_str or not lng_str:
+            return "Latitude and Longitude are required", 400
 
-    try:
-        lat = float(lat_str)
-        lng = float(lng_str)
-    except ValueError:
-        return "Invalid coordinates format", 400
+        try:
+            lat = float(lat_str)
+            lng = float(lng_str)
+        except ValueError:
+            return "Invalid coordinates format", 400
 
-    # Save to MongoDB
-    ngo = {
-        "name": name,
-        "email": email,
-        "password": password,
-        "lat": lat,
-        "lng": lng
-    }
-    mongo.db.ngos.insert_one(ngo)
-    return redirect('/ngo/login')
+        ngo = {
+            "name": name,
+            "email": email,
+            "password": password,
+            "lat": lat,
+            "lng": lng
+        }
+        mongo.db.ngos.insert_one(ngo)
+        return redirect('/ngo/login')
 
- return render_template('ngo_register.html')
-                     
+    return render_template('ngo_register.html')
 
 @app.route('/ngo/login', methods=['GET', 'POST'])
 def ngo_login():
@@ -98,26 +118,25 @@ def ngo_logout():
 @app.route('/ngo/dashboard')
 def ngo_dashboard():
     if 'ngo_id' not in session:
-        return redirect('/ngo/login')  # redirect if not logged in
+        return redirect('/ngo/login')
 
     ngo_id = session['ngo_id']
     ngo = mongo.db.ngos.find_one({'_id': ObjectId(ngo_id)})
 
-    donations = list(mongo.db.donations.find({'status': 'Pending'}))  # or all donations if you prefer
+    donations = list(mongo.db.donations.find({'status': 'Pending'}))
 
-    # Pass just lat/lng for mapping
     donations_for_map = [{
         'lat': d.get('lat', 0),
         'lng': d.get('lng', 0)
     } for d in donations]
 
     return render_template(
-    'ngo_dashboard.html',
-    ngo_name=ngo['name'],
-    ngo=ngo,
-    donations=donations,
-    donations_json= donations_col  # Already safe JSON
-)
+        'ngo_dashboard.html',
+        ngo_name=ngo['name'],
+        ngo=ngo,
+        donations=donations,
+        donations_json=donations_for_map
+    )
 
 @app.route('/ngo/accept/<donation_id>')
 def accept_donation(donation_id):
@@ -139,10 +158,10 @@ def register_rider():
             "password": generate_password_hash(request.form['password']),
         }
         rider_col.insert_one(data)
-        return redirect('/rider/register')  # Redirect after successful registration
+        return redirect('/rider/register')
     return render_template('rider_register.html')
 
 # ---------------------- Run App ----------------------
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0', debug=True)
