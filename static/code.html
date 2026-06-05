@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartPark AI - Layout Designer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .canvas-grid {
+            background-image: radial-gradient(circle, #bccbb9 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .glass-panel {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.7);
+        }
+        .cursor-crosshair {
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- Theme Config and Shared Components Logic implemented via Tailwind and Structure -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#005ac2",
+                        "on-surface": "#0b1c30",
+                        "inverse-primary": "#4ae176",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "primary-fixed-dim": "#4ae176",
+                        "tertiary-container": "#82abff",
+                        "surface-variant": "#d3e4fe",
+                        "outline": "#6d7b6c",
+                        "on-tertiary-fixed": "#001a42",
+                        "primary": "#006e2f",
+                        "on-secondary-fixed": "#410004",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "secondary": "#b61722",
+                        "surface-container-high": "#dce9ff",
+                        "on-primary-fixed-variant": "#005321",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#003d88",
+                        "on-secondary-container": "#fffbff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-fixed": "#ffdad7",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#f8f9ff",
+                        "outline-variant": "#bccbb9",
+                        "surface": "#f8f9ff",
+                        "surface-container": "#e5eeff",
+                        "on-background": "#0b1c30",
+                        "tertiary-fixed": "#d8e2ff",
+                        "primary-container": "#22c55e",
+                        "surface-container-highest": "#d3e4fe",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-container": "#da3437",
+                        "surface-tint": "#006e2f",
+                        "inverse-surface": "#213145",
+                        "on-secondary-fixed-variant": "#930013",
+                        "on-primary-fixed": "#002109",
+                        "on-surface-variant": "#3d4a3d",
+                        "on-primary-container": "#004b1e",
+                        "primary-fixed": "#6bff8f",
+                        "secondary-fixed-dim": "#ffb3ad"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "touch-target": "44px",
+                        "lg": "24px",
+                        "gutter": "12px",
+                        "xl": "32px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "container-margin": "16px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "mono-data": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<div class="flex h-screen w-full overflow-hidden">
+<!-- SideNavBar Shared Component -->
+<aside class="fixed inset-y-0 left-0 z-40 h-screen w-64 flex flex-col shrink-0 bg-surface dark:bg-inverse-surface shadow-sm border-r border-surface-container-high">
+<div class="px-6 py-8">
+<h1 class="text-headline-lg font-headline-lg text-primary dark:text-inverse-primary">SmartPark AI</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Logistics Center v2.4</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="videocam">videocam</span>
+<span class="font-label-md">Live Detection</span>
+</a>
+<!-- Active Navigation: Parking Layout -->
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container rounded-lg px-4 py-3 mx-2" href="#">
+<span class="material-symbols-outlined" data-icon="map" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label-md">Parking Layout</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md">Detection History</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-label-md">Alerts</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-variant rounded-lg px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-surface-container-high flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<img alt="System Operator" data-alt="A professional close-up portrait of a logistics system operator wearing a clean, modern uniform. The lighting is soft and corporate, set against a blurred background of a high-tech control center with multiple screens displaying data. The overall atmosphere is focused, efficient, and reliable, maintaining a bright light-mode aesthetic with crisp green and white brand colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-yvYzfzWEIzjqVcLdvr66ixFIYfnPc88-A_CDK5fzTpwiqEzYFAXGGTkyHd1wdNyFAwi1YE_5g4k-FwaT-btz8SU2YaUuIAtfZv7pev9OkWdmS8ra3Vt1_Fq2owKg5ElrWSXy7Nm0zO9ozRMFsrFbeTGzADgqn0JanQKVySphe4Ylez7WcTA_zAJzq71LT4IUogjaSREv1NSHveZ9b-BRI4LFdu0eV9BZ2LhdgRhehbYdkj3t6PpDO-nZ4M0wyKYSClYaBuyOdTc"/>
+</div>
+<div>
+<p class="font-label-md text-on-surface">System Operator</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Administrator</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex flex-col relative h-full">
+<!-- TopNavBar Shared Component -->
+<header class="h-16 w-full flex items-center justify-between sticky top-0 right-0 z-30 bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-md px-6 shadow-sm">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-lg text-primary dark:text-inverse-primary">Layout Editor</span>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center bg-surface-container rounded-full px-4 py-1.5 focus-within:ring-2 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48 text-on-surface" placeholder="Search facilities..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full">
+<div class="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-label-md text-primary font-bold">System Status: Operational</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- CAD Designer Interface -->
+<div class="flex flex-1 overflow-hidden">
+<!-- Center Stage: Blueprint Canvas -->
+<div class="flex-1 relative bg-surface-container-low overflow-hidden flex flex-col">
+<!-- Toolbar -->
+<div class="absolute top-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-surface shadow-lg border border-surface-container-high rounded-xl p-1.5 glass-panel">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg shadow-sm transition-all" title="Draw Rectangle">
+<span class="material-symbols-outlined text-[20px]" data-icon="rectangle">rectangle</span>
+<span class="font-label-md">Draw Slots</span>
+</button>
+<div class="w-[1px] h-6 bg-outline-variant mx-1"></div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" title="Auto-Number">
+<span class="material-symbols-outlined" data-icon="format_list_numbered">format_list_numbered</span>
+</button>
+<button class="p-2 text-primary bg-primary/10 rounded-lg transition-all" title="Snap to Grid">
+<span class="material-symbols-outlined" data-icon="grid_4x4" style="font-variation-settings: 'FILL' 1;">grid_4x4</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" title="Selection Tool">
+<span class="material-symbols-outlined" data-icon="near_me">near_me</span>
+</button>
+<div class="w-[1px] h-6 bg-outline-variant mx-1"></div>
+<button class="p-2 text-secondary hover:bg-secondary-fixed rounded-lg transition-all" title="Delete">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+<!-- The Canvas -->
+<div class="flex-1 w-full h-full canvas-grid cursor-crosshair relative p-12 overflow-auto" id="drawingCanvas">
+<!-- Blueprint Underlay -->
+<div class="min-w-[1200px] min-h-[800px] bg-white rounded-xl shadow-xl relative border-4 border-surface-container-highest flex items-center justify-center">
+<div class="absolute inset-0 overflow-hidden rounded-lg opacity-40 mix-blend-multiply">
+<img alt="Warehouse Blueprint" class="w-full h-full object-cover" data-alt="An architectural blueprint of a large logistics warehouse facility, showing clean lines and precise technical measurements. The background is a crisp technical white with light grey drafting lines. The aesthetic is professional, architectural, and highly detailed, reflecting a modern CAD design environment with high-performance clarity and machine intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArj7GHDVEJXW10r7vODSbNjtorcntdHPwxAD0SP3hUegm4THAPcyuUQT4GFv8TXfqoasghocJF1PqU_DI4ekIwOS1Jpnw0S5sikJ5yRnJcqZ_0NCwHB9S781qdr9JA-zgLDVEpnS4QI1Ce1q5nJbJjpZIz9UHDxDXzlVw5MYsKNjajDGh9ZLazCx_zz7F0mPXL438IB4yAiqD7vbC3LKSlbhDiz-oUaTxrQtMPI2SwtFVrmVlTt-V5xjiwFMu4oEMfeUuQxbT_rtY"/>
+</div>
+<!-- Mock Drawn Slots -->
+<div class="absolute top-[20%] left-[15%] w-[400px] h-[300px] border-2 border-dashed border-primary/40 flex flex-wrap gap-1 p-2">
+<div class="w-[44px] h-[80px] bg-primary/20 border border-primary rounded-sm flex flex-col items-center justify-center">
+<span class="text-[10px] font-mono-data text-primary">A-01</span>
+</div>
+<div class="w-[44px] h-[80px] bg-primary/20 border border-primary rounded-sm flex flex-col items-center justify-center">
+<span class="text-[10px] font-mono-data text-primary">A-02</span>
+</div>
+<div class="w-[44px] h-[80px] bg-primary/20 border border-primary rounded-sm flex flex-col items-center justify-center">
+<span class="text-[10px] font-mono-data text-primary">A-03</span>
+</div>
+<div class="w-[44px] h-[80px] bg-primary-container border border-on-primary-container rounded-sm flex flex-col items-center justify-center shadow-md ring-2 ring-primary">
+<span class="text-[10px] font-mono-data text-on-primary-container">A-04</span>
+<span class="material-symbols-outlined text-[14px] text-on-primary-container" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="w-[44px] h-[80px] border border-outline-variant border-dashed rounded-sm flex items-center justify-center">
+<span class="text-[10px] font-mono-data text-outline">NEW</span>
+</div>
+</div>
+<!-- User Cursor Visualizer -->
+<div class="absolute pointer-events-none hidden border-2 border-primary bg-primary/10 rounded-sm" id="drawingPreview"></div>
+</div>
+</div>
+<!-- Zoom Controls -->
+<div class="absolute bottom-6 left-6 flex flex-col gap-2">
+<button class="w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-surface-variant transition-colors border border-surface-container-high">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<button class="w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-surface-variant transition-colors border border-surface-container-high">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+</div>
+</div>
+<!-- Right Sidebar: Layout Properties -->
+<aside class="w-80 bg-surface border-l border-surface-container-high flex flex-col p-6 space-y-8 shadow-[-4px_0_15px_rgba(0,0,0,0.02)] z-10">
+<div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface mb-1">Layout Properties</h2>
+<p class="text-body-sm text-on-surface-variant">Configure the selected sector</p>
+</div>
+<!-- Bento Stats -->
+<div class="grid grid-cols-1 gap-4">
+<div class="p-4 bg-surface-container-low rounded-xl border border-surface-container">
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Sector Name</p>
+<div class="flex items-center justify-between">
+<span class="font-headline-lg text-primary">Logistics East-A</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+<div class="p-4 bg-surface-container-low rounded-xl border border-surface-container relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Total Slot Count</p>
+<div class="flex items-end gap-2">
+<span class="text-[32px] font-bold leading-none text-on-surface">142</span>
+<span class="text-body-sm text-primary font-semibold mb-1">+12 recently added</span>
+</div>
+</div>
+<div class="p-4 bg-primary-container/10 rounded-xl border border-primary-container/30">
+<div class="flex items-center justify-between mb-3">
+<p class="text-label-md text-on-primary-container font-bold uppercase tracking-wider">Capacity AI Rating</p>
+<span class="material-symbols-outlined text-primary-container" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<span class="text-headline-lg font-bold text-on-primary-container">Optimal</span>
+<span class="text-body-md font-mono-data text-primary-container font-bold">94%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full w-[94%] shadow-[0_0_8px_#22c55e]"></div>
+</div>
+<p class="text-[12px] text-on-surface-variant leading-relaxed">
+                                    AI predicts +15% throughput efficiency compared to the previous layout. Current density is within safety margins.
+                                </p>
+</div>
+</div>
+</div>
+<!-- AI Insights -->
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="lightbulb">lightbulb</span>
+<h3 class="font-bold text-on-surface">Smart Suggestions</h3>
+</div>
+<ul class="space-y-3">
+<li class="p-3 bg-surface-container rounded-lg text-body-sm text-on-surface-variant border-l-4 border-secondary/40">
+                                Narrow turning radius detected at Sector A-04. Recommend shifting slots by 2ft.
+                            </li>
+<li class="p-3 bg-surface-container rounded-lg text-body-sm text-on-surface-variant border-l-4 border-tertiary/40">
+                                Fire exit obstruction risk identified. Ensure 10ft clearance in layout.
+                            </li>
+</ul>
+</div>
+<button class="w-full h-touch-target bg-primary text-on-primary font-bold rounded-xl shadow-lg hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+                        Deploy Layout
+                    </button>
+</aside>
+</div>
+</main>
+</div>
+<script>
+        // Micro-interactions for the drawing tool
+        const canvas = document.getElementById('drawingCanvas');
+        const preview = document.getElementById('drawingPreview');
+        let isDrawing = false;
+        let startX, startY;
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            startX = e.pageX;
+            startY = e.pageY;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            preview.style.left = `${x}px`;
+            preview.style.top = `${y}px`;
+            preview.style.width = '0px';
+            preview.style.height = '0px';
+            preview.classList.remove('hidden');
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+            
+            const startCanvasX = startX - rect.left - window.scrollX;
+            const startCanvasY = startY - rect.top - window.scrollY;
+
+            const width = Math.abs(currentX - startCanvasX);
+            const height = Math.abs(currentY - startCanvasY);
+            
+            preview.style.width = `${width}px`;
+            preview.style.height = `${height}px`;
+            preview.style.left = `${Math.min(currentX, startCanvasX)}px`;
+            preview.style.top = `${Math.min(currentY, startCanvasY)}px`;
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+            // In a real app, this would commit a permanent rectangle
+            setTimeout(() => {
+                preview.classList.add('hidden');
+            }, 200);
+        });
+
+        // Toggle Active State for Toolbar buttons
+        const toolbarButtons = document.querySelectorAll('.absolute.top-6 button');
+        toolbarButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.title === 'Delete') return; // Don't highlight delete
+                toolbarButtons.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary');
+                    b.classList.add('text-on-surface-variant', 'hover:bg-surface-variant');
+                });
+                btn.classList.remove('text-on-surface-variant', 'hover:bg-surface-variant');
+                btn.classList.add('bg-primary', 'text-on-primary');
+            });
+        });
+    </script>
+</body></html>
