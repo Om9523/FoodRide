@@ -161,6 +161,8 @@ def register_rider():
         return redirect('/rider/register')
     return render_template('rider_register.html')
 
+#end the project 
+
 # ---------------------- Run App ----------------------
 
 if __name__ == '__main__':
